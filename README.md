@@ -98,7 +98,7 @@ That's it. No `npm install`, no build step.
 
 ## Disclaimer
 
-This is a study tool I'm building for personal exam prep and learning. It is **not** an official NYC DOHMH product, and passing this practice quiz does not certify anyone for anything. The official course is at [nyc.gov/health](https://www.nyc.gov/site/doh/business/food-operators/food-protection-course.page).
+This is a study tool I'm building for personal exam prep and learning. It is **not** an official NYC DOHMH product, and passing this practice quiz does not certify anyone for anything. The official course is at [nyc.gov/health](https://www.nyc.gov/site/doh/business/food-operators/training.page).
 
 ## License
 
