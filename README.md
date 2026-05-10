@@ -1,4 +1,4 @@
-# Foodsafe.nyc — NYC Food Protection Course Study Companion
+# NYC Food Protection Course Study Companion
 
 An interactive study tool for the New York City Department of Health & Mental Hygiene (DOHMH) Food Protection Course exam. Two modes — a multiple-choice practice quiz and a flashcard deck — covering all 15 lessons of the official curriculum plus the official 5-day study guide.
 
@@ -117,7 +117,7 @@ Each HTML file is fully self-contained — styles and scripts inline. You could 
 
 ## Disclaimer
 
-This is a study tool I built for personal exam prep and learning. It is **not** an official NYC DOHMH product, and using it does not certify anyone. The official course is at [nyc.gov/health](https://www.nyc.gov/site/doh/business/food-operators/food-protection-course.page).
+This is a study tool I built for personal exam prep and learning. It is **not** an official NYC DOHMH product, and using it does not certify anyone. The official course is at [nyc.gov/health](https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page).
 
 ## License
 
