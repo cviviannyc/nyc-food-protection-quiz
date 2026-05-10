@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards · NYC Food Protection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #183F72;
+    --navy-deep: #0E2A4F;
+    --amber: #D18137;
+    --amber-soft: #E8A971;
+    --cream: #FAF8F3;
+    --cream-warm: #F2EEE3;
+    --ink: #1F1D1A;
+    --ink-soft: #5C584F;
+    --ink-mute: #8E8A80;
+    --line: #E2DDD0;
+    --line-soft: #ECE7DA;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .nav {
+    border-bottom: 1px solid var(--line);
+    background: var(--cream);
+  }
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+  .logo .dot { color: var(--amber); }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a.active { color: var(--navy); font-weight: 500; }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .page-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--navy);
+  }
+  .page-header p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    max-width: 560px;
+  }
+
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .panel h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .panel-sub {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  button, .btn {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--sans);
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--ink);
+    text-align: center;
+  }
+  button:hover:not(:disabled) {
+    border-color: var(--navy);
+    background: var(--cream-warm);
+  }
+  button:disabled { cursor: default; opacity: 0.4; }
+  button.selected {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+    font-weight: 500;
+  }
+  button.primary {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+    font-weight: 500;
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 100px;
+  }
+  button.primary:hover:not(:disabled) {
+    background: var(--navy-deep);
+    border-color: var(--navy-deep);
+  }
+  button.amber {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
+    font-weight: 500;
+  }
+  button.amber:hover:not(:disabled) {
+    background: var(--amber-soft);
+    border-color: var(--amber-soft);
+  }
+
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--amber);
+    transition: width 0.3s;
+    width: 0%;
+  }
+  .reshuffle-btn {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+
+  .category-tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--amber);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .flashcard {
+    perspective: 1200px;
+    height: 320px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+  .flashcard-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+  }
+  .flashcard-front {
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .flashcard-back {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--amber);
+    transform: rotateY(180deg);
+  }
+  .card-side-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+    margin-bottom: 20px;
+  }
+  .flashcard-back .card-side-label { color: var(--amber); opacity: 1; }
+  .card-content {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .flashcard-back .card-content {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+  .flip-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-bottom: 20px;
+  }
+
+  .nav-buttons {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .nav-buttons button {
+    padding: 12px;
+    border-radius: 100px;
+  }
+
+  .footer {
+    border-top: 1px solid var(--line);
+    margin-top: 64px;
+    padding: 32px 0;
+    color: var(--ink-mute);
+    font-size: 13px;
+    text-align: center;
+  }
+  .footer a { color: var(--ink-soft); }
+  .footer a:hover { color: var(--navy); }
+
+  @media (max-width: 640px) {
+    .nav-inner { padding: 14px 20px; }
+    .container { padding: 0 20px; }
+    .page-header { padding: 32px 0 24px; }
+    .panel { padding: 24px; border-radius: 12px; }
+    .flashcard { height: 280px; }
+    .card-content { font-size: 22px; }
+    .flashcard-back .card-content { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Foodsafe<span class="dot">.</span>nyc</a>
+    <div class="nav-links">
+      <a href="quiz.html">Quiz</a>
+      <a href="flashcards.html" class="active">Flashcards</a>
+      <a href="index.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <header class="page-header">
+    <div class="eyebrow">Flashcards</div>
+    <h1>Drill the facts that <em>show up most.</em></h1>
+    <p>Click a card to flip it. Use ← → keys or buttons to navigate. Press space to flip. Designed for repetition.</p>
+  </header>
+
+  <div id="setup" class="panel">
+    <h2>Pick what to study</h2>
+    <p class="panel-sub">Filter by category, then shuffle or go in order.</p>
+
+    <div class="label">Category</div>
+    <div id="category-buttons" class="button-grid"></div>
+
+    <div class="label">Order</div>
+    <div id="order-buttons" class="button-grid"></div>
+
+    <button id="start-btn" class="primary">Start studying</button>
+  </div>
+
+  <div id="study" style="display: none;">
+    <div class="panel">
+      <div class="progress-row">
+        <span id="progress-text">Card 1 of 50</span>
+        <button id="restart-deck" class="reshuffle-btn">Reshuffle</button>
+      </div>
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+
+      <div id="card-category" class="category-tag"></div>
+
+      <div id="flashcard" class="flashcard">
+        <div class="flashcard-inner">
+          <div class="flashcard-face flashcard-front">
+            <div class="card-side-label">Term</div>
+            <div id="card-front" class="card-content"></div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="card-side-label">Answer</div>
+            <div id="card-back" class="card-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-hint">Tap card or press space to flip · ← → to navigate</div>
+
+      <div class="nav-buttons">
+        <button id="prev-btn">← Prev</button>
+        <button id="flip-btn" class="amber">Flip card</button>
+        <button id="next-btn">Next →</button>
+      </div>
+      <button id="exit-btn" style="width: 100%; padding: 10px; font-size: 13px; border-radius: 100px;">Back to menu</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <a href="index.html">Back to home</a> · Built by <a href="https://github.com/cviviannyc">Vivian</a> · Not affiliated with NYC DOHMH
+</footer>
+
+<script>
+const CARDS = [
+  // TEMPERATURES & NUMBERS
+  {c:'temp', f:'Temperature danger zone', b:'41°F – 140°F'},
+  {c:'temp', f:'Cold-hold for potentially hazardous foods', b:'41°F or below'},
+  {c:'temp', f:'Hot-hold for potentially hazardous foods', b:'140°F or above'},
+  {c:'temp', f:'Cooking temperature for poultry, stuffing, and reheated foods', b:'165°F for at least 15 seconds'},
+  {c:'temp', f:'Cooking temperature for ground beef', b:'158°F (destroys E. coli 0157:H7)'},
+  {c:'temp', f:'Cooking temperature for pork', b:'150°F for 15 seconds (destroys Trichinella)'},
+  {c:'temp', f:'Cooking temperature for raw shell eggs', b:'145°F for 15 seconds'},
+  {c:'temp', f:'Cooking temperature for fish, beef, lamb (other meats)', b:'140°F for 15 seconds'},
+  {c:'temp', f:'Frozen food receiving and storage temperature', b:'0°F or below'},
+  {c:'temp', f:'Smoked fish storage temperature', b:'38°F or below (prevents botulism)'},
+  {c:'temp', f:'Shell egg ambient storage temperature', b:'45°F'},
+  {c:'temp', f:'Reheating requirement', b:'Reach 165°F within 2 hours, on a stove or oven'},
+  {c:'temp', f:'Microwave reheating requirement', b:'190°F, covered, then stand covered for 2 minutes'},
+  {c:'temp', f:'Freezing temp/time to kill Anisakis worms in fish', b:'-31°F for 15 hours'},
+  {c:'temp', f:'Maximum days for pasteurized milk', b:'9 calendar days from pasteurization'},
+  {c:'temp', f:'Maximum days for ultra-pasteurized milk', b:'45 days from ultra-pasteurization'},
+  {c:'temp', f:'Shellfish tag retention period', b:'90 days after product is used, in order of delivery'},
+  {c:'temp', f:'Boiling-point thermometer calibration reading', b:'212°F (boiling water at sea level)'},
+  {c:'temp', f:'Ice-point thermometer calibration reading', b:'32°F (50/50 ice water slush)'},
+  {c:'temp', f:'How far off the floor must food be stored?', b:'At least 6 inches'},
+  {c:'temp', f:'Recommended dry storage humidity and temperature', b:'Humidity 50% or less, temperature 70°F or less'},
+  {c:'temp', f:'How often can one bacterium become two under ideal conditions?', b:'Every 20–30 minutes (binary fission)'},
+  {c:'temp', f:'Grade A score range', b:'0–13 points'},
+  {c:'temp', f:'Grade B score range', b:'14–27 points'},
+  {c:'temp', f:'Grade C score threshold', b:'28 or more points'},
+  {c:'temp', f:'Grade card posting location', b:'Front window/door/outside wall — within 5 ft of entrance, 4–6 ft off the ground'},
+  {c:'temp', f:'pH threshold below which food is too acidic for bacterial growth', b:'pH of 4.6 or below'},
+  {c:'temp', f:'Water activity (Aw) threshold below which bacteria cannot grow', b:'.85 or less'},
+  {c:'temp', f:'Cold cooling: 140°F to 70°F maximum time', b:'Within 2 hours'},
+  {c:'temp', f:'Cold cooling: 70°F to 41°F maximum time', b:'Within 4 additional hours (total 6 hr max)'},
+  {c:'temp', f:'Maximum time PHF can spend in temperature danger zone', b:'2 hours total — then it must be discarded'},
+  {c:'temp', f:'50 PPM chlorine sanitizer recipe', b:'1/2 ounce bleach per 1 gallon of water (immersion: 1 minute min)'},
+  {c:'temp', f:'100 PPM chlorine sanitizer recipe', b:'1 ounce bleach per 1 gallon of water (wiping/spraying/pouring)'},
+  {c:'temp', f:'Hot-water sanitization', b:'Immerse utensils in 170°F water for at least 30 seconds'},
+  {c:'temp', f:'Hand washing sink distance from food prep areas', b:'Within 25 feet'},
+  {c:'temp', f:'Hand washing rub time', b:'20 seconds (sing Happy Birthday twice)'},
+  {c:'temp', f:'Patron bathrooms required when seats reach', b:'20 or more in the dining area'},
+  {c:'temp', f:'Door sweep gap maximum to prevent pests', b:'Less than 1/8 inch'},
+  {c:'temp', f:'Pest management professional examination frequency', b:'At least monthly, with records kept'},
+  {c:'temp', f:'Smoke-Free Air Act first violation fine', b:'$200–$400'},
+  {c:'temp', f:'Cigarette vending machine distance from entrance (taverns)', b:'At least 25 feet'},
+  {c:'temp', f:'Calorie posting threshold (chain establishments)', b:'15 or more locations in the U.S.'},
+  {c:'temp', f:'Grease interceptor minimum grease removal', b:'At least 90% of grease from wastewater'},
+
+  // PATHOGENS
+  {c:'path', f:'Salmonella enteritidis', b:'Source: poultry, eggs, chicken. Foods: chicken, poultry, eggs. Onset: 6–48 hrs. Type: infection. Control: cook chicken to 165°F.'},
+  {c:'path', f:'Campylobacter jejuni', b:'Source: intestines of sheep, pigs, cattle, poultry. Foods: raw milk, poultry, beef, untreated water. Onset: 2–10 days. Type: infection.'},
+  {c:'path', f:'Listeria monocytogenes', b:'Source: soil, infected animals, water. Foods: unpasteurized milk, deli meats, soft cheese, raw vegetables. Onset: 1 day to 3 weeks. Especially dangerous to pregnant women.'},
+  {c:'path', f:'Shigella', b:'Source: humans (fecal-oral). Foods: raw produce, salads, prepared foods. Onset: 1–7 days. Spread by poor handwashing and flies. Type: infection.'},
+  {c:'path', f:'Staphylococcus aureus', b:'Source: healthy humans (nose, throat, skin, infected cuts). Foods: baked goods, custards, cooked foods left at room temp. Onset: 1–6 hrs. Type: intoxication. Toxin not destroyed by heat.'},
+  {c:'path', f:'Clostridium botulinum (Botulism)', b:'Source: soil, water, intestinal tracts. Foods: home-canned, vacuum-packed, garlic in oil, smoked fish, baked potatoes. Onset: 12–36 hrs. Anaerobic. Can cause death.'},
+  {c:'path', f:'E. coli 0157:H7', b:'Source: cattle intestines, sewage water. Foods: raw/undercooked beef (especially ground), unpasteurized milk. Onset: 12–72 hrs. Causes HUS in children — leading cause of kidney failure.'},
+  {c:'path', f:'Clostridium perfringens', b:'Source: soil, dust, animal/human GI tracts. Foods: cooked meats, gravy, beans. Onset: 8–22 hrs. Both infection and intoxication. Hold hot foods at 140°F+.'},
+  {c:'path', f:'Bacillus cereus', b:'Source: soil. Foods: rice, grains, flour, spices, starchy products. Onset: 30 min to 5 hrs. Both infection and intoxication.'},
+  {c:'path', f:'Hepatitis A', b:'Source: fecal-contaminated water. Foods: raw/lightly cooked shellfish, salads, cold cuts. Onset: 15–50 days. Affects the liver. Can be fatal.'},
+  {c:'path', f:'Norovirus', b:'Source: feces of infected humans. Foods: raw vegetables, coleslaw, raw shellfish, eggs. Onset: 24–48 hrs. Highly contagious. Spread by poor hand hygiene.'},
+  {c:'path', f:'Trichinella spiralis (Trichinosis)', b:'Parasite. Source: pork, bear, walrus. Onset: 4–28 days. Control: cook pork to 150°F for 15 seconds.'},
+  {c:'path', f:'Anisakis simplex (Anisakiasis)', b:'Parasite. Source: marine fish (saltwater). Foods: raw/undercooked sushi, sashimi, ceviche. Control: freeze fish at -31°F for 15 hours.'},
+  {c:'path', f:'Scombroid poisoning', b:'Histamine intoxication. Foods: tuna, mackerel, bluefish, mahi-mahi, bonito. Onset: minutes to 2 hrs. Histamine NOT destroyed by cooking. Cause: fish not refrigerated soon after being caught.'},
+  {c:'path', f:'Ciguatera', b:'Toxin in predatory fish (e.g. barracuda) that eat algae-feeding fish. Toxin NOT destroyed by cooking. From toxic algae in certain waters/seasons.'},
+  {c:'path', f:'Cyclospora cayetanensis', b:'Parasite. Source: human feces, fecal-contaminated water. Foods: raw produce (especially berries), raw milk, water. Onset: about a week.'},
+
+  // DEFINITIONS & VOCABULARY
+  {c:'def', f:'FATTOM', b:'The 6 conditions bacteria need to grow: Food, Acidity, Time, Temperature, Oxygen, Moisture'},
+  {c:'def', f:'FIFO', b:'First In, First Out — stock rotation method. The first step is to date the products. Older stock used before newer stock.'},
+  {c:'def', f:'Potentially Hazardous Food (PHF)', b:'Foods that support rapid microbial growth — typically high-protein animal products, cooked starches, cut produce. Examples: meat, poultry, milk, fish, shellfish, tofu, cooked rice/pasta/beans/potatoes, garlic in oil.'},
+  {c:'def', f:'Ready-to-Eat (RTE) Food', b:'Any food that does not need additional heat treatment or washing before being eaten. Bare hand contact is prohibited — use gloves, tongs, deli paper, or utensils.'},
+  {c:'def', f:'Foodborne Infection', b:'Illness caused by eating large numbers of live microorganisms that grow in the digestive tract. Onset: hours to days.'},
+  {c:'def', f:'Foodborne Intoxication', b:'Illness caused by eating toxins already produced on food. Onset: usually fast (minutes to 6 hours). Toxins often heat-stable.'},
+  {c:'def', f:'Foodborne Toxin-Mediated Infection', b:'Microorganisms ingested with food then produce toxins inside the intestines (e.g. E. coli 0157:H7).'},
+  {c:'def', f:'Cross-contamination', b:'Transfer of harmful microorganisms from one food (usually raw) to another (usually ready-to-eat). Prevented by separation, handwashing, and sanitizing surfaces. Most common cause: human error.'},
+  {c:'def', f:'Spores', b:'Dormant protective shells some bacteria form to survive heat, cold, or dryness. Resistant to cooking. Examples: tetanus, anthrax, botulism.'},
+  {c:'def', f:'Aerobes', b:'Bacteria that need oxygen to grow.'},
+  {c:'def', f:'Anaerobes', b:'Bacteria that grow without oxygen — thrive in vacuum packs, canned foods, garlic in oil.'},
+  {c:'def', f:'Facultative bacteria', b:'Bacteria that can grow with or without oxygen.'},
+  {c:'def', f:'Mesophilic bacteria', b:'Bacteria that grow best between 50°F–110°F. The group of greatest food safety concern.'},
+  {c:'def', f:'Psychrophilic bacteria', b:'Cold-loving bacteria that grow below 50°F.'},
+  {c:'def', f:'Thermophilic bacteria', b:'Heat-loving bacteria that grow best between 110°F–150°F.'},
+  {c:'def', f:'Pathogenic bacteria', b:'Disease-causing bacteria. Cannot be detected by sight, smell, or taste in food.'},
+  {c:'def', f:'Putrefying bacteria', b:'Spoilage bacteria — cause food to decay. Easy to identify by smell/color/taste. Spoiled food rarely causes foodborne illness.'},
+  {c:'def', f:'Sanitizer', b:'A chemical that kills pathogenic microorganisms. Most common in food industry: chlorine.'},
+  {c:'def', f:'USDA Inspection Stamp', b:'Mandatory mark on meat showing it is sanitary and fit for human consumption. Different from the (optional) USDA Grade Stamp, which only attests to quality.'},
+  {c:'def', f:'The Big 8 Food Allergens', b:'Fish, Peanuts, Wheat, Soy, Tree Nuts, Eggs, Milk, Shellfish. Mnemonic: Food Problems Will Send The EMS.'},
+  {c:'def', f:'Physical hazard', b:'Foreign object in food that can cause injury — glass shards, hair, jewelry, false fingernails, toothpicks, staples, bandages.'},
+  {c:'def', f:'Chemical hazard', b:'Toxic chemicals in food — pesticides, cleaning agents, sulfites, MSG (in excess), naturally toxic foods, mercury accumulation, prescription medicine.'},
+  {c:'def', f:'Biological hazard', b:'Living things in food that cause illness — bacteria, viruses, parasites, fungi.'},
+  {c:'def', f:'Modified Atmosphere Packaging (MAP)', b:'Food packed with air removed and gases added to extend shelf life. Anaerobic — favors botulism if not refrigerated. Requires DOHMH permission to manufacture.'},
+  {c:'def', f:'Vacuum packaging', b:'Food packed in a sealed package with all air removed. Anaerobic — favors Clostridium botulinum. Prohibited in retail food establishments without DOHMH authorization.'},
+  {c:'def', f:'Sous-vide', b:'Food vacuum-packed and cooked inside the package. Requires special permission from NYC DOHMH to manufacture.'},
+  {c:'def', f:'Batch preparation', b:'Removing only enough food from refrigeration as can be prepared in a short time, to minimize time in the temperature danger zone.'},
+  {c:'def', f:'Pasteurization (HTST/Flash)', b:'High Temperature Short Time — hold milk at 161°F for 15 seconds.'},
+  {c:'def', f:'Pasteurization (Holding method)', b:'Hold milk at 145°F for 30 minutes.'},
+  {c:'def', f:'Administrative Tribunal', b:'NYC Health Department body where a restaurant can contest violations after an inspection. Restaurant can post "Grade Pending" until the hearing.'},
+  {c:'def', f:'Compliance Inspection', b:'Inspection conducted ~30 days after a re-inspection if the score was 28+. Not graded. Continues until score drops below 28 or restaurant is closed.'},
+  {c:'def', f:'Food Protection Certificate', b:'Required NYC certification. A certified supervisor must be on premises during ALL hours of food preparation.'},
+  {c:'def', f:'Approved source', b:'A food source legally permitted to supply food service establishments. Home-canned and home-prepared foods are NOT from approved sources and cannot be received.'},
+  {c:'def', f:'Split-lot tag', b:'Tag provided when buying small amounts of shellfish from a retailer — must contain all info from the original shipper tag.'},
+
+  // LESSON 8 — PREPARING FOOD
+  {c:'def', f:'Three acceptable thawing methods', b:'(1) In refrigerator at 41°F, (2) under cold running water for max 2 hours, (3) in microwave with continuous cooking afterwards. Never thaw at room temperature.'},
+  {c:'def', f:'Bare hand contact rule', b:'Bare hand contact with ready-to-eat foods is prohibited. Use gloves, tongs, deli paper, spatulas, or other utensils. Hand sanitizer is NOT a substitute.'},
+  {c:'def', f:'Glove changing requirements', b:'Change gloves when contaminated, torn, when leaving prep area, or switching between raw and ready-to-eat foods. Change frequently to prevent perspiration buildup.'},
+  {c:'def', f:'Rapid cooling rules', b:'Cool from 140°F → 70°F within 2 hours, then 70°F → 41°F within an additional 4 hours. Total max: 6 hours. Never cool at room temperature — use refrigerator or ice bath.'},
+  {c:'def', f:'Cooling cut-off', b:'Cut food into portions of 6 lbs or less. Use shallow pans (4 inches deep, 1–2 inches of product). Metal containers conduct heat best.'},
+  {c:'def', f:'Reheating requirements', b:'All cooked, refrigerated PHF served hot must be reheated to 165°F or above for 15 seconds within 2 hours, then held at 140°F+. Use stove or oven — never a hot holding unit.'},
+  {c:'def', f:'Dedicated food-washing sink', b:'Required by Health Code. Single-compartment culinary sink, dedicated compartment of multi-comp sink, or food-grade container/colander. Cannot be used as utility, slop, or hand-wash sink.'},
+  {c:'def', f:'Outdoor cooking requirement', b:'Allowed if establishment protects food and equipment per Health Code requirements.'},
+
+  // LESSON 9 — PERSONAL HYGIENE
+  {c:'def', f:'When to wash hands (key triggers)', b:'Before starting work, before putting on gloves, after toilet, after raw foods, after touching body, after sneezing/coughing, after smoking/eating/drinking, after anything that may contaminate hands.'},
+  {c:'def', f:'5 steps of proper handwashing', b:'(1) Use hot and cold running water, (2) wet hands and apply soap, (3) rub for 20 seconds with nail brush, (4) rinse thoroughly, (5) dry with disposable towel or hand dryer.'},
+  {c:'def', f:'Hand wash sink requirements', b:'Soap, hot AND cold running water, disposable towels (or hand dryer), and a "Wash Hands" sign. Located within 25 feet of food prep areas. Not blocked by doors or equipment.'},
+  {c:'def', f:'Allowed jewelry on food workers', b:'Only a wedding band and medical bracelets. No other jewelry on arms or hands.'},
+  {c:'def', f:'Sick worker rule', b:'Food workers with fever, cold, cough, upset stomach, diarrhea, or infected pus-filled wound must not work. If illness is transmissible through food, they cannot work in the establishment at all.'},
+
+  // LESSON 10 — DESIGN
+  {c:'def', f:'Manual dishwashing sequence', b:'Wash, rinse, sanitize, air-dry. Use a 3-compartment sink. Never towel-dry — re-contaminates utensils.'},
+  {c:'def', f:'High-temperature dishwasher final rinse', b:'170°F minimum, 195°F maximum. Beyond 195°F, water vaporizes before sanitization is achieved.'},
+  {c:'def', f:'Wiping cloth storage', b:'Stored in a 50 PPM sanitizing solution between uses.'},
+
+  // LESSON 11 — PLUMBING
+  {c:'def', f:'Air break', b:'Unobstructed vertical distance through air separating equipment from waste/sewer pipe. Must be twice the diameter of the discharge opening or 1 inch (whichever is greater). Required at culinary/equipment sinks. NOT at hand wash sinks.'},
+  {c:'def', f:'Atmospheric Vacuum Breaker (AVB)', b:'Must be installed in equipment with direct connection to potable water — ice machines, coffee machines, dishwashers. Prevents backflow.'},
+  {c:'def', f:'Hose bib vacuum breaker', b:'Prevents cross-connection between potable water and contaminated water sources.'},
+  {c:'def', f:'Grease interceptor', b:'Required in waste lines from pot wash sinks, soup kettles, scullery sinks, etc. Must remove at least 90% of grease. Dumping grease without one is illegal.'},
+
+  // LESSON 12 — PEST CONTROL
+  {c:'def', f:'Integrated Pest Management (IPM)', b:'Three key strategies: Starve them (deny food), Build them out (block access), Destroy them (eliminate existing pests).'},
+  {c:'def', f:'Pesticide application rule', b:'Insecticides and rodenticides can ONLY be applied by a licensed pest control officer (PCO).'},
+  {c:'def', f:'Fly zappers (electric grids)', b:'PROHIBITED in food establishments — fly parts can become airborne and contaminate food. Glue-trap "fly catchers" are acceptable.'},
+  {c:'def', f:'Service animals', b:'Live animals are prohibited in food establishments EXCEPT service animals accompanying disabled persons (Section 81.25).'},
+  {c:'def', f:'Pest management professional license', b:'Must be licensed by NY State Department of Environmental Conservation (DEC). Examine premises at least monthly. Keep records.'},
+
+  // LESSON 13 — HACCP
+  {c:'def', f:'HACCP', b:'Hazard Analysis and Critical Control Point. A food safety system pioneered by Pillsbury in the 1960s for the space program.'},
+  {c:'def', f:'7 principles of HACCP', b:'(1) Identify hazards, (2) determine Critical Control Points (CCPs), (3) set critical limits, (4) monitor CCPs, (5) take corrective actions, (6) verify the system, (7) keep records.'},
+  {c:'def', f:'Critical Control Point (CCP)', b:'Any point in the food flow where action MUST be taken to prevent, reduce, or eliminate a hazard. Failure to act will render the food unsafe.'},
+  {c:'def', f:'Artificial trans fat in NYC restaurants', b:'BANNED from all restaurant foods. Increases LDL ("bad") cholesterol, leading to heart disease.'},
+
+  // LESSON 14 — POSTINGS
+  {c:'def', f:'Required NYC postings', b:'(1) First Aid Choking poster (eating areas), (2) Alcohol & Pregnancy Warning (if alcohol served), (3) How Are We Doing? sign, (4) cigarette age signs (if applicable), (5) No Smoking signs throughout, (6) Wash Hands sign at every hand wash sink.'},
+  {c:'def', f:'First Aid Choking poster', b:'Details the Heimlich maneuver. Must be conspicuously posted in each designated eating area.'},
+  {c:'def', f:'Alcohol and Pregnancy Warning sign', b:'Required at all establishments serving alcoholic beverages (Local Law 63). Warns about Fetal Alcohol Syndrome.'},
+
+  // LESSON 15 — LOCAL LAWS
+  {c:'def', f:'Local Law 47 — Smoke-Free Air Act', b:'Effective March 30, 2003. Prohibits smoking in virtually all establishments with employees — restaurants, bars, malls, theaters, sports arenas, etc.'},
+  {c:'def', f:'Local Law 67 — Tobacco vending machines', b:'Prohibited in food service establishments EXCEPT taverns. In taverns, machines must be 25+ feet from any entrance and visible by owner/employee.'},
+  {c:'def', f:'Local Law 83 — Sale of tobacco to minors', b:'Prohibits tobacco sales to persons under 18. (NYC has since raised this to 21 by separate legislation.) ID required. Conspicuous signage required.'},
+  {c:'def', f:'Local Law 12 — CPR equipment', b:'Taverns and restaurants serving food on-premise must have: 1 adult resuscitation mask, 1 pediatric mask, 2 pairs of latex gloves, and signage indicating where the equipment is located.'},
+  {c:'def', f:'Smoke-Free Air Act penalties', b:'1st violation: $200–$400. 2nd (within 12 months): $500–$1,000. 3rd: $1,000–$2,000. Three violations in 12 months can result in permit suspension/revocation.'},
+  {c:'def', f:'Common restaurant worker injuries', b:'Slips, trips, falls, cuts, lacerations, burns, muscle strains, sprains, electrocution. Prevent with slip-resistant shoes, training, and safety equipment.'}
+];
+
+const CATEGORIES = [
+  {id:'all', label:'All cards', filter:()=>true},
+  {id:'temp', label:'Temperatures & numbers', filter:c=>c.c==='temp'},
+  {id:'path', label:'Pathogens', filter:c=>c.c==='path'},
+  {id:'def', label:'Definitions', filter:c=>c.c==='def'}
+];
+
+const ORDERS = [
+  {id:'shuffle', label:'Shuffle'},
+  {id:'sequential', label:'In order'}
+];
+
+const CATEGORY_NAMES = {
+  temp: 'Temperatures & numbers',
+  path: 'Pathogens',
+  def: 'Definitions & vocabulary'
+};
+
+let state = { category: 'all', order: 'shuffle', deck: [], current: 0, flipped: false };
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function renderSetup(){
+  const cb = document.getElementById('category-buttons');
+  cb.innerHTML = '';
+  CATEGORIES.forEach(c => {
+    const b = document.createElement('button');
+    b.textContent = c.label;
+    if (state.category === c.id) b.classList.add('selected');
+    b.onclick = () => { state.category = c.id; renderSetup(); };
+    cb.appendChild(b);
+  });
+
+  const ob = document.getElementById('order-buttons');
+  ob.innerHTML = '';
+  ORDERS.forEach(o => {
+    const b = document.createElement('button');
+    b.textContent = o.label;
+    if (state.order === o.id) b.classList.add('selected');
+    b.onclick = () => { state.order = o.id; renderSetup(); };
+    ob.appendChild(b);
+  });
+}
+
+function startStudying(){
+  const cat = CATEGORIES.find(c => c.id === state.category);
+  const pool = CARDS.filter(cat.filter);
+  state.deck = state.order === 'shuffle' ? shuffle(pool) : [...pool];
+  state.current = 0;
+  state.flipped = false;
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('study').style.display = 'block';
+  renderCard();
+  window.scrollTo(0, 0);
+}
+
+function renderCard(){
+  const card = state.deck[state.current];
+  state.flipped = false;
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+  document.getElementById('card-front').textContent = card.f;
+  document.getElementById('card-back').textContent = card.b;
+  document.getElementById('card-category').textContent = CATEGORY_NAMES[card.c];
+  document.getElementById('progress-text').textContent = 'Card ' + (state.current + 1) + ' of ' + state.deck.length;
+  document.getElementById('progress-fill').style.width = (((state.current + 1) / state.deck.length) * 100) + '%';
+
+  document.getElementById('prev-btn').disabled = state.current === 0;
+  document.getElementById('next-btn').disabled = state.current === state.deck.length - 1;
+}
+
+function flipCard(){
+  state.flipped = !state.flipped;
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard(){
+  if (state.current < state.deck.length - 1) {
+    state.current++;
+    renderCard();
+  }
+}
+
+function prevCard(){
+  if (state.current > 0) {
+    state.current--;
+    renderCard();
+  }
+}
+
+function reshuffle(){
+  state.deck = shuffle(state.deck);
+  state.current = 0;
+  renderCard();
+}
+
+function exitToMenu(){
+  document.getElementById('study').style.display = 'none';
+  document.getElementById('setup').style.display = 'block';
+  renderSetup();
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('start-btn').onclick = startStudying;
+document.getElementById('flashcard').onclick = flipCard;
+document.getElementById('flip-btn').onclick = flipCard;
+document.getElementById('next-btn').onclick = nextCard;
+document.getElementById('prev-btn').onclick = prevCard;
+document.getElementById('restart-deck').onclick = reshuffle;
+document.getElementById('exit-btn').onclick = exitToMenu;
+
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('study').style.display === 'none') return;
+  if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  else if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+});
+
+renderSetup();
+</script>
+</body>
+</html>

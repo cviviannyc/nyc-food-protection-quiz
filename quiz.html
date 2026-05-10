@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Quiz · NYC Food Protection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #183F72;
+    --navy-deep: #0E2A4F;
+    --amber: #D18137;
+    --amber-soft: #E8A971;
+    --cream: #FAF8F3;
+    --cream-warm: #F2EEE3;
+    --ink: #1F1D1A;
+    --ink-soft: #5C584F;
+    --ink-mute: #8E8A80;
+    --line: #E2DDD0;
+    --line-soft: #ECE7DA;
+    --green: #2E7B5C;
+    --green-bg: #E5F0EA;
+    --red: #B23B3B;
+    --red-bg: #F7E8E8;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .nav {
+    border-bottom: 1px solid var(--line);
+    background: var(--cream);
+  }
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+  .logo .dot { color: var(--amber); }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a.active { color: var(--navy); font-weight: 500; }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .page-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--navy);
+  }
+  .page-header p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    max-width: 560px;
+  }
+
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .panel h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .panel-sub {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  button, .btn {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--sans);
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--ink);
+    text-align: center;
+  }
+  button:hover:not(:disabled) {
+    border-color: var(--navy);
+    background: var(--cream-warm);
+  }
+  button:disabled { cursor: default; opacity: 0.95; }
+  button.selected {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+    font-weight: 500;
+  }
+  button.option {
+    text-align: left;
+    padding: 14px 18px;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  button.option:hover:not(:disabled) {
+    background: var(--cream-warm);
+  }
+  button.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  button.incorrect {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  button.primary {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+    font-weight: 500;
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 100px;
+  }
+  button.primary:hover:not(:disabled) {
+    background: var(--navy-deep);
+    border-color: var(--navy-deep);
+  }
+  button.amber {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
+    font-weight: 500;
+  }
+  button.amber:hover:not(:disabled) {
+    background: var(--amber-soft);
+    border-color: var(--amber-soft);
+  }
+
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .progress-row .score { font-weight: 500; color: var(--navy); }
+  .progress-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--amber);
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  .lesson-tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--amber);
+    margin-bottom: 14px;
+  }
+  .question-text {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.35;
+    margin-bottom: 24px;
+    letter-spacing: -0.005em;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+    display: none;
+  }
+  .feedback.correct {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid rgba(46, 123, 92, 0.2);
+  }
+  .feedback.incorrect {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid rgba(178, 59, 59, 0.2);
+  }
+  .feedback strong { font-weight: 600; }
+  .button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .results { text-align: center; }
+  .results .result-num {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 64px;
+    color: var(--navy);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .results .result-pct {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--cream-warm);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 28px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-box .lbl {
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .results .msg {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .review-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .review-header {
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .review-q {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .review-line {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .review-line.correct { color: var(--green); }
+  .review-line.exp {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+  .check { color: var(--green); font-weight: 500; }
+  .x { color: var(--red); font-weight: 500; }
+
+  .footer {
+    border-top: 1px solid var(--line);
+    margin-top: 64px;
+    padding: 32px 0;
+    color: var(--ink-mute);
+    font-size: 13px;
+    text-align: center;
+  }
+  .footer a { color: var(--ink-soft); }
+  .footer a:hover { color: var(--navy); }
+
+  @media (max-width: 640px) {
+    .nav-inner { padding: 14px 20px; }
+    .container { padding: 0 20px; }
+    .page-header { padding: 32px 0 24px; }
+    .panel { padding: 24px; border-radius: 12px; }
+    .question-text { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Foodsafe<span class="dot">.</span>nyc</a>
+    <div class="nav-links">
+      <a href="quiz.html" class="active">Quiz</a>
+      <a href="flashcards.html">Flashcards</a>
+      <a href="index.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <header class="page-header">
+    <div class="eyebrow">Practice quiz</div>
+    <h1>Test your <em>recall</em>, build your confidence.</h1>
+    <p>Pick a topic and length below. Each question gives instant feedback with the correct answer and a one-line explanation. Review everything at the end.</p>
+  </header>
+
+  <div id="quiz-setup" class="panel">
+    <h2>Set up your session</h2>
+    <p class="panel-sub">Filter by lesson or shuffle the full bank. Choose how many questions you want.</p>
+
+    <div class="label">Topic</div>
+    <div id="topic-buttons" class="button-grid"></div>
+
+    <div class="label">Length</div>
+    <div id="mode-buttons" class="button-grid"></div>
+
+    <button id="start-btn" class="primary">Start quiz</button>
+  </div>
+
+  <div id="quiz-active" style="display: none;">
+    <div class="panel">
+      <div class="progress-row">
+        <span id="progress-text">Question 1 of 10</span>
+        <span class="score" id="score-text">Score: 0</span>
+      </div>
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+
+      <div id="q-lesson" class="lesson-tag"></div>
+      <div id="q-text" class="question-text"></div>
+      <div id="q-options" class="options"></div>
+      <div id="q-feedback" class="feedback"></div>
+      <div class="button-row">
+        <button id="next-btn" class="primary" style="display: none;">Next question</button>
+        <button id="quit-btn" style="padding: 14px 22px; border-radius: 100px;">End</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-results" style="display: none;">
+    <div class="panel results">
+      <div class="eyebrow">Your score</div>
+      <div id="result-score" class="result-num"></div>
+      <div id="result-pct" class="result-pct"></div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="num" id="stat-correct">0</div><div class="lbl">Correct</div></div>
+        <div class="stat-box"><div class="num" id="stat-wrong">0</div><div class="lbl">Wrong</div></div>
+        <div class="stat-box"><div class="num" id="stat-total">0</div><div class="lbl">Total</div></div>
+      </div>
+      <div id="result-msg" class="msg"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button id="review-btn" style="padding: 12px; border-radius: 100px;">Review answers</button>
+        <button id="restart-btn" class="primary">New quiz</button>
+      </div>
+    </div>
+    <div id="review-section" style="display: none;"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <a href="index.html">Back to home</a> · Built by <a href="https://github.com/cviviannyc">Vivian</a> · Not affiliated with NYC DOHMH
+</footer>
+
+<script>
+const QUESTIONS = [
+  // LESSON 1 — NYC REGULATIONS
+  {l:1,q:"What is the maximum score for a Grade A sanitary inspection in NYC?",o:["0–13 points","0–20 points","14–27 points","Below 28 points"],a:0,e:"Grade A is 0–13 points. Grade B is 14–27. Grade C is 28+."},
+  {l:1,q:"How many points result in a Grade C?",o:["14 or more","21 or more","28 or more","35 or more"],a:2,e:"28 or more points = Grade C."},
+  {l:1,q:"Where must a restaurant post its grade card?",o:["Anywhere inside the restaurant","On a front window/door/outside wall, within 5 ft of entrance, 4–6 ft off the ground","On the menu only","Behind the host stand"],a:1,e:"Must be visible from outside, within 5 ft of entrance, 4–6 ft off the ground."},
+  {l:1,q:"Which of these establishments does NOT receive a letter grade?",o:["Coffee shops","Bars","Mobile food vending units","Cafeterias"],a:2,e:"Mobile food vending units, school cafeterias, hospital cafeterias, and charitable food programs are exempt."},
+  {l:1,q:"A Food Protection Certificate holder must be on premises:",o:["Only during inspections","During all hours of food preparation","Only during the dinner shift","One day per week"],a:1,e:"A certified supervisor must be on the premises during ALL hours of food preparation."},
+  {l:1,q:"Offering a Health Department inspector a bribe can result in:",o:["A warning only","Fines and revocation of permits","A 1-point deduction","Nothing if refused"],a:1,e:"Bribing an inspector is illegal — fines and permit revocation."},
+  {l:1,q:"After a re-inspection, if a restaurant disagrees with the violations, it can:",o:["Refuse to post a grade","Contest violations at the Administrative Tribunal","Demand a third inspection","Close voluntarily for 30 days"],a:1,e:"Restaurants can contest at the Administrative Tribunal and post 'Grade Pending' until the hearing."},
+  {l:1,q:"All food service establishments in NYC must have:",o:["A current and valid permit issued by the NYC Health Department","Just a business license","An OSHA registration","A federal FDA permit"],a:0,e:"All food service establishments must have a current and valid NYC Health Department permit."},
+  {l:1,q:"Health inspectors must be given:",o:["A 24-hour appointment notice","Access to all areas of the establishment during inspection","Permission from the owner before inspecting","Only public-facing area access"],a:1,e:"Inspectors have the right to inspect any operating food establishment and must be given access to all areas."},
+
+  // LESSON 2 — INTRO TO FOOD SAFETY / RECEIVING
+  {l:2,q:"What is the temperature danger zone?",o:["32°F – 100°F","41°F – 140°F","45°F – 165°F","0°F – 41°F"],a:1,e:"The danger zone is 41°F to 140°F — where bacteria grow most rapidly."},
+  {l:2,q:"At what temperature must fresh meat, poultry, and most potentially hazardous foods be received?",o:["32°F or below","41°F or below","45°F or below","50°F or below"],a:1,e:"Most fresh PHF must be received at 41°F or below."},
+  {l:2,q:"Frozen foods must be received at:",o:["32°F or below","20°F or below","0°F or below","-10°F or below"],a:2,e:"Frozen foods must arrive at 0°F or below."},
+  {l:2,q:"Smoked fish must be stored at what temperature?",o:["41°F or below","38°F or below","45°F or below","32°F or below"],a:1,e:"Smoked fish requires 38°F or below to prevent Clostridium botulinum growth."},
+  {l:2,q:"Shell eggs must be kept at an ambient temperature of:",o:["41°F","45°F","50°F","32°F"],a:1,e:"Shell eggs must be kept refrigerated at an ambient temperature of 45°F."},
+  {l:2,q:"A food is considered NOT potentially hazardous if its pH is:",o:["4.6 or below","5.0 or below","6.0 or below","7.0 or above"],a:0,e:"pH of 4.6 or below is too acidic to support rapid bacterial growth."},
+  {l:2,q:"A food is considered NOT potentially hazardous if its water activity (Aw) is:",o:[".95 or less",".85 or less",".50 or less",".75 or less"],a:1,e:"Water activity of .85 or less is too dry for bacterial growth."},
+  {l:2,q:"Which of the following is NOT a potentially hazardous food?",o:["Cooked rice","Tofu","Cut melons","Dry pasta"],a:3,e:"Dry pasta has very low water activity. Cooked rice/pasta IS potentially hazardous."},
+  {l:2,q:"What stamp on meat indicates it came from an approved source?",o:["USDA Grade Stamp","USDA Inspection Stamp","FDA Stamp","State Health Stamp"],a:1,e:"The USDA Inspection Stamp shows the meat is sanitary and fit for consumption. The grade stamp only attests to quality."},
+  {l:2,q:"Pasteurized milk must NOT exceed how many days from pasteurization?",o:["7 days","9 days","14 days","21 days"],a:1,e:"Pasteurized milk: 9 calendar days max. Ultra-pasteurized: 45 days max."},
+  {l:2,q:"Fresh fish should be received at:",o:["32°F","41°F or below, on ice","45°F","50°F"],a:1,e:"Fresh fish must be received cold and on ice at 41°F or less."},
+  {l:2,q:"How long must shellfish tags be kept after the product is used up?",o:["30 days","60 days","90 days","180 days"],a:2,e:"Shellfish tags must be kept for 90 days after the product is used, in order of delivery."},
+  {l:2,q:"Which type of canned good must be rejected?",o:["A can with a small label tear","A can with a slight dent on the body","A can with swollen ends","A can with a faded label"],a:2,e:"Reject cans with swollen ends, severe rust/dents, leaks, or dents on any of the three seams."},
+  {l:2,q:"To calibrate a bi-metallic thermometer using ice-point method, the reading should be:",o:["32°F","40°F","41°F","0°F"],a:0,e:"50/50 ice water slush should read 32°F at sea level."},
+  {l:2,q:"Boiling-point thermometer calibration reading is:",o:["100°F","165°F","212°F","220°F"],a:2,e:"Boiling water at sea level is 212°F."},
+  {l:2,q:"Home-canned foods can be received at a food service establishment:",o:["Only with manager approval","Only if labeled","Never","Only for personal use"],a:2,e:"Home-canned foods and foods prepared in a private home cannot be received."},
+  {l:2,q:"Which thermometer type is PROHIBITED in a food establishment?",o:["Bi-metallic stem","Thermocouple","Thermistor (digital)","Glass thermometer"],a:3,e:"Glass thermometers are prohibited by law in food establishments — risk of breakage and physical contamination."},
+  {l:2,q:"Vacuum packaging in a retail food establishment is:",o:["Always allowed","Allowed with no restrictions","Prohibited unless special authorization is obtained from NYC Health Department","Allowed only with USDA approval"],a:2,e:"Vacuum packaging in retail food establishments is prohibited unless special authorization is obtained from NYC DOHMH."},
+
+  // LESSON 3 — STORING FOOD
+  {l:3,q:"What does FIFO stand for?",o:["Food In Food Out","First In First Out","Fresh In Fresh Out","Fast In Fast Out"],a:1,e:"First In, First Out — older stock is used before newer stock."},
+  {l:3,q:"What is the FIRST step in implementing FIFO?",o:["Move old stock to the back","Date the products","Throw out expired items","Inspect packaging"],a:1,e:"The first step in implementing FIFO is to date the products."},
+  {l:3,q:"In a refrigerator, raw foods should be stored:",o:["Above cooked foods","Below and away from cooked foods","Next to cooked foods","Anywhere — it doesn't matter"],a:1,e:"Raw foods always go BELOW cooked foods to prevent cross-contamination from drips."},
+  {l:3,q:"How far off the floor must all food items be stored?",o:["1 inch","3 inches","6 inches","12 inches"],a:2,e:"NYC Health Code: at least 6 inches off the floor — allows cleaning and detection of vermin."},
+  {l:3,q:"Recommended dry storage humidity is:",o:["50% or less","70% or less","80% or less","No specific level"],a:0,e:"Dry storage: humidity 50% or less, temperature 70°F or less."},
+  {l:3,q:"Which container material should NOT be used for storing acidic foods?",o:["Food-grade plastic","Stainless steel","Galvanized metal","Glass"],a:2,e:"Copper, brass, tin, and galvanized metal cannot be used. Acidic foods react with these metals."},
+  {l:3,q:"When receiving multiple items, what should be stored first?",o:["Dry goods","Refrigerated foods","Frozen foods","Canned goods"],a:2,e:"Frozen first, then refrigerated, then non-perishable dry goods."},
+  {l:3,q:"Can you refreeze thawed foods?",o:["Yes, if still cold","Yes, within 24 hours","Never — use immediately","Only meats"],a:2,e:"Never refreeze thawed foods — bacteria can multiply to dangerous levels when thawed again."},
+  {l:3,q:"Ice intended for human consumption can be used to:",o:["Store cans and bottles","Cool food storage containers","Be served in drinks only","Cool meat displays"],a:2,e:"Ice for human consumption cannot be used to store cans, bottles, or other food products."},
+  {l:3,q:"When food is stored directly in ice, the water must be:",o:["Left to accumulate","Constantly drained","Refilled with ice every hour","Salted to lower the freezing point"],a:1,e:"Water from melting ice must be constantly drained so the food remains on ice, not in iced water."},
+
+  // LESSON 4 — HEALTH HAZARDS
+  {l:4,q:"Which of these is a PHYSICAL hazard?",o:["Salmonella","Sulfites","Broken glass in food","Botulism toxin"],a:2,e:"Physical hazards are foreign objects: glass, hair, jewelry, toothpicks, fingernails, etc."},
+  {l:4,q:"The presence of pesticide residue on food is which type of hazard?",o:["Physical","Chemical","Biological","None"],a:1,e:"Pesticides, cleaning agents, and prescription medicine in food are chemical hazards."},
+  {l:4,q:"Bacteria, viruses, parasites, and fungi in food are which type of hazard?",o:["Physical","Chemical","Biological","Allergic"],a:2,e:"Microorganisms in food are biological hazards."},
+  {l:4,q:"Adding sulfites to food in a NYC food service establishment is:",o:["Allowed in moderation","Allowed if disclosed","Prohibited","Required for freshness"],a:2,e:"Adding sulfites at a food service establishment is prohibited."},
+  {l:4,q:"Which fish poisoning is caused by histamine and is NOT destroyed by cooking?",o:["Ciguatera","Scombroid","Anisakiasis","Botulism"],a:1,e:"Scombroid poisoning — histamine accumulates if fish like tuna/mackerel aren't refrigerated soon after being caught."},
+  {l:4,q:"Which of these is one of the eight major food allergens?",o:["Strawberries","Shellfish","Onions","Garlic"],a:1,e:"The Big 8: Fish, Peanuts, Wheat, Soy, Tree Nuts, Eggs, Milk, Shellfish."},
+  {l:4,q:"Which biological hazard poses the BIGGEST threat to food safety?",o:["Molds","Yeasts","Bacteria and viruses","Parasites"],a:2,e:"Bacteria and viruses pose the biggest threat — invisible and can multiply or contaminate easily."},
+  {l:4,q:"A severe allergic reaction can include:",o:["A mild headache","Loss of consciousness from airway obstruction","A slight rash only","Nothing — allergies are mild"],a:1,e:"Severe reactions include loss of consciousness due to airway obstruction and even death."},
+  {l:4,q:"Foods contaminated with pathogenic bacteria typically:",o:["Smell bad","Taste off","Have no change in appearance, taste, or smell","Look slimy"],a:2,e:"This is what makes pathogens so dangerous — you can't see, smell, or taste them."},
+
+  // LESSON 5 — BACTERIA
+  {l:5,q:"What does the acronym FATTOM stand for?",o:["Food, Acidity, Time, Temperature, Oxygen, Moisture","Food, Air, Texture, Time, Oxygen, Moisture","Fats, Acids, Toxins, Time, Oxygen, Microbes","Food, Acidity, Toxicity, Temperature, Oxygen, Moisture"],a:0,e:"Food, Acidity, Time, Temperature, Oxygen, Moisture — the six conditions bacteria need to grow."},
+  {l:5,q:"Under ideal conditions, how often can one bacterium become two?",o:["Every 5 minutes","Every 20–30 minutes","Every hour","Every 4 hours"],a:1,e:"Bacteria can double every 20–30 minutes by binary fission under ideal conditions."},
+  {l:5,q:"Bacteria that thrive without oxygen are called:",o:["Aerobes","Anaerobes","Facultative","Thermophilic"],a:1,e:"Anaerobes thrive without oxygen. Aerobes need it. Facultative grow either way."},
+  {l:5,q:"Bacteria that grow best between 50°F–110°F are called:",o:["Psychrophilic","Mesophilic","Thermophilic","Pathogenic"],a:1,e:"Mesophilic — grow best 50°F–110°F. This group is of greatest concern for food safety."},
+  {l:5,q:"What are the four phases of bacterial growth?",o:["Birth, life, maturity, death","Lag, log, stationary, death","Slow, fast, peak, decline","Start, middle, peak, end"],a:1,e:"The four phases of bacterial growth are: lag, log, stationary, and death."},
+  {l:5,q:"In which phase do bacteria grow most rapidly?",o:["Lag phase","Log phase","Stationary phase","Death phase"],a:1,e:"The most rapid growth of bacteria takes place in the log phase."},
+  {l:5,q:"What is the most popular sanitizer used in the food industry?",o:["Iodine","Chlorine","Quaternary ammonia","Hydrogen peroxide"],a:1,e:"Chlorine is the most popular sanitizer in the food industry."},
+  {l:5,q:"Spore-forming bacteria are dangerous because:",o:["They reproduce faster","They withstand harsh conditions like heat","They produce more toxin","They smell worse"],a:1,e:"Spores form a protective shell that resists heat and other adverse conditions, then germinate when conditions improve."},
+  {l:5,q:"Cold temperatures (below 41°F) on bacteria:",o:["Kill all bacteria","Slow down their growth","Speed up their growth","Have no effect"],a:1,e:"Cold temperatures slow down the growth of microorganisms — they don't kill them."},
+
+  // LESSON 6 — OTHER MICROORGANISMS
+  {l:6,q:"Unlike bacteria, viruses:",o:["Reproduce in food","Cannot reproduce in food","Are larger than bacteria","Don't cause illness"],a:1,e:"Viruses cannot reproduce in food — food just transports them until ingested."},
+  {l:6,q:"How can transmission of Hepatitis A and norovirus be prevented?",o:["Cooking longer","Proper handwashing after using the toilet","Refrigerating food longer","Wearing a mask"],a:1,e:"These viruses are transmitted via fecal-oral route. Proper handwashing after using the toilet prevents transmission."},
+  {l:6,q:"Anisakiasis can be controlled by freezing fish at:",o:["0°F for 24 hours","-31°F for 15 hours","-10°F for 1 week","32°F overnight"],a:1,e:"Freeze fish at -31°F for 15 hours to kill the Anisakid worm."},
+  {l:6,q:"Trichinella spiralis is a parasite commonly associated with:",o:["Beef","Pork","Chicken","Fish"],a:1,e:"Trichinella spiralis is associated with pork (also bear and walrus). Cook pork to 150°F for 15 seconds."},
+  {l:6,q:"Molds grow well in:",o:["Only warm conditions","Refrigerators too — they don't need warmth","Only acidic foods","Only dry conditions"],a:1,e:"Molds don't require warmth and grow well in refrigerators."},
+  {l:6,q:"Yeasts require which of the following to grow?",o:["No oxygen","Air (oxygen) and sugar","Only protein","Only acid"],a:1,e:"Yeasts need air (oxygen) and feed on sugar, producing alcohol and CO2."},
+
+  // LESSON 7 — FOODBORNE ILLNESS
+  {l:7,q:"What is the difference between a foodborne infection and intoxication?",o:["No difference","Infection = eating live microorganisms; Intoxication = eating toxins","Intoxication is from alcohol","Infection takes longer to recover from"],a:1,e:"Infection: eating live microorganisms. Intoxication: eating toxins already produced on the food."},
+  {l:7,q:"Salmonella enteritidis is most associated with:",o:["Pork and beef","Poultry, eggs, and chicken","Vegetables","Dairy products"],a:1,e:"Salmonella enteritidis is associated with poultry, eggs, and chicken."},
+  {l:7,q:"Staphylococcus aureus is commonly found:",o:["In raw chicken","In healthy humans (nose, throat, skin, infected cuts)","In river water","In unwashed produce"],a:1,e:"Staph is found on healthy humans. Spread by poor personal hygiene and bare hand contact with food."},
+  {l:7,q:"Botulism is dangerous because:",o:["It spreads fast","Its toxin is not destroyed by cooking and can cause death","It only affects children","It causes only mild symptoms"],a:1,e:"Clostridium botulinum produces a heat-stable toxin that can cause respiratory paralysis and death."},
+  {l:7,q:"Which condition favors Clostridium botulinum growth?",o:["High oxygen environments","Anaerobic environments (no air) like vacuum packs and garlic in oil","High acidity","Frozen storage"],a:1,e:"C. botulinum is anaerobic — thrives in vacuum-packed foods, home canning, garlic-in-oil, and inside baked potatoes."},
+  {l:7,q:"E. coli 0157:H7 in children can lead to:",o:["Mild diarrhea only","Hemolytic Uremic Syndrome (HUS) and kidney failure","Headaches only","Skin rash"],a:1,e:"E. coli 0157:H7 can cause HUS — the leading cause of kidney failure in children."},
+  {l:7,q:"Hepatitis A is most associated with:",o:["Cooked meat","Raw or lightly cooked shellfish","Pasteurized milk","Canned goods"],a:1,e:"Hepatitis A: raw/lightly cooked shellfish, salads, cold cuts. Spread via fecal-contaminated water."},
+  {l:7,q:"Listeria is particularly dangerous for:",o:["The elderly only","Pregnant women — can cause miscarriages and stillbirths","Children under 5 only","Diabetics"],a:1,e:"Listeria monocytogenes can cause miscarriages, stillbirths, and meningitis in newborns."},
+  {l:7,q:"The onset time for Staphylococcal food intoxication is:",o:["1–6 hours","12–36 hours","2–10 days","Within minutes"],a:0,e:"Staph onset is fast: 1–6 hours. Toxins are preformed on the food."},
+  {l:7,q:"The onset time for Botulism is approximately:",o:["1–6 hours","12–36 hours","4–28 days","Immediately"],a:1,e:"Botulism onset: 12–36 hours."},
+  {l:7,q:"Bacillus cereus is commonly associated with:",o:["Meat only","Rice, grains, flour, and starchy foods","Shellfish","Dairy"],a:1,e:"Bacillus cereus is found in soil — affects rice, grains, flour, spices, and starchy products."},
+  {l:7,q:"Clostridium perfringens can be controlled by:",o:["Cooking only","Rapid cooling, rapid reheating, and avoiding advance preparation","Adding vinegar","Freezing"],a:1,e:"Clostridium perfringens is controlled by rapid cooling, rapid reheating to 165°F within 2 hours, and avoiding advance preparation."},
+
+  // LESSON 8 — PREPARING FOOD
+  {l:8,q:"Which is NOT an acceptable thawing method?",o:["In the refrigerator at 41°F","Submerged under cold running water for max 2 hours","On the counter at room temperature","In a microwave with continuous cooking after"],a:2,e:"Never thaw at room temperature. Acceptable: refrigerator, cold running water (≤2 hrs), or microwave with continuous cooking."},
+  {l:8,q:"Poultry, stuffed meat, and stuffing must be cooked to:",o:["140°F","150°F","158°F","165°F for 15 seconds"],a:3,e:"Poultry, stuffed meat, and stuffing: 165°F for 15 seconds."},
+  {l:8,q:"Ground meat must be cooked to:",o:["145°F","150°F","158°F for 15 seconds","165°F"],a:2,e:"Ground meat: 158°F for 15 seconds — destroys E. coli 0157:H7."},
+  {l:8,q:"Pork must be cooked to:",o:["140°F","145°F","150°F for 15 seconds","165°F"],a:2,e:"Pork: 150°F for 15 seconds — destroys Trichinella."},
+  {l:8,q:"Raw shell eggs must be cooked to a minimum of:",o:["120°F","135°F","145°F","165°F"],a:2,e:"Raw shell eggs: 145°F minimum (unless customer requests otherwise)."},
+  {l:8,q:"Fish, shellfish, beef, lamb, and other meats must be cooked to a minimum of:",o:["120°F","130°F","140°F for 15 seconds","165°F"],a:2,e:"Other meats and fish: 140°F for 15 seconds."},
+  {l:8,q:"Hot foods in a hot holding unit must be held at:",o:["120°F or higher","135°F or higher","140°F or higher","165°F or higher"],a:2,e:"Hot holding: 140°F or higher."},
+  {l:8,q:"All foods being reheated must reach what temperature within 2 hours?",o:["140°F","150°F","165°F","180°F"],a:2,e:"All reheated foods must reach 165°F within 2 hours, on a stove or oven (NOT a hot holding unit)."},
+  {l:8,q:"During rapid cooling, food must drop from 140°F to 70°F within:",o:["1 hour","2 hours","4 hours","6 hours"],a:1,e:"140°F → 70°F within 2 hours, then 70°F → 41°F within an additional 4 hours. Total max cooling time: 6 hours."},
+  {l:8,q:"After 70°F, food must drop to 41°F within an additional:",o:["1 hour","2 hours","4 hours","8 hours"],a:2,e:"70°F → 41°F within 4 additional hours."},
+  {l:8,q:"Bare hand contact with ready-to-eat foods is:",o:["Allowed if hands are washed","Allowed if a hand sanitizer is used","Prohibited — must use gloves, tongs, deli paper, or utensils","Allowed only at home"],a:2,e:"Bare hand contact with ready-to-eat foods is prohibited. Use gloves, tongs, deli paper, or other utensils."},
+  {l:8,q:"Disposable gloves should be changed:",o:["Once per shift","When they tear, get contaminated, or you switch tasks","Every 8 hours","Only when visibly dirty"],a:1,e:"Change gloves when contaminated, torn, when leaving the prep area, or switching from raw to ready-to-eat."},
+  {l:8,q:"Microwave-reheated potentially hazardous food must be reheated to:",o:["140°F","165°F","190°F and stand covered for 2 minutes","212°F"],a:2,e:"Microwave reheating: at least 190°F, covered, then stand covered for 2 minutes (compensates for uneven cooking)."},
+  {l:8,q:"How should hot foods be cooled in a refrigerator?",o:["Covered tightly","Uncovered, then covered after they reach 41°F","In a sealed container","Mixed with ice in the container"],a:1,e:"Cover only after the food has cooled to 41°F. Covering hot food traps heat and slows cooling."},
+  {l:8,q:"To wash food safely under the Health Code, use:",o:["Any kitchen sink","A dedicated culinary sink (or compartment, or food-grade container)","The same sink as hand washing","An outdoor faucet"],a:1,e:"Use a dedicated culinary sink, or a dedicated compartment, or a food-grade container/colander."},
+
+  // LESSON 9 — PERSONAL HYGIENE
+  {l:9,q:"Which is NOT one of the situations that requires hand washing?",o:["Before starting work","After handling raw foods","After scratching","After putting on gloves"],a:3,e:"Wash hands BEFORE putting on gloves, not after. Also: after toilet, raw foods, body contact, sneezing, smoking, eating, drinking, scratching."},
+  {l:9,q:"Hand washing sinks must be located within:",o:["10 feet of food prep areas","25 feet of all food preparation areas","50 feet of food prep areas","No specific distance"],a:1,e:"NYC Health Code: hand washing sinks must be readily accessible within 25 feet of all food preparation areas."},
+  {l:9,q:"How long should you rub hands together when washing?",o:["5 seconds","10 seconds","20 seconds","60 seconds"],a:2,e:"Rub hands together for 20 seconds (about two rounds of 'Happy Birthday')."},
+  {l:9,q:"Hand washing sinks must be equipped with:",o:["Just soap and water","Soap, hot and cold running water, disposable towels (or hand dryer), and a 'Wash Hands' sign","Just paper towels","A hand sanitizer dispenser only"],a:1,e:"Hand washing sinks need soap, hot AND cold running water, disposable towels or a hand dryer, and a 'Wash Hands' sign."},
+  {l:9,q:"Are hand sanitizers an acceptable substitute for proper hand washing?",o:["Yes, always","Only with soap","No — hand sanitizers are used only AFTER proper hand washing","Only for cooks"],a:2,e:"Hand sanitizers are not acceptable instead of proper hand washing. Use only after washing."},
+  {l:9,q:"Food workers may wear which jewelry on their hands/arms?",o:["Any rings or watches","No jewelry except a wedding band and medical bracelet","Bracelets only","Plain silver only"],a:1,e:"NYC Health Code: no jewelry on arms/hands except a wedding band and medical bracelets."},
+  {l:9,q:"A food worker with diarrhea, fever, or an infected wound should:",o:["Wear gloves and keep working","Not work until fully recovered","Switch to back-of-house tasks","Take antibiotics and continue"],a:1,e:"Sick food workers must not work until fully recovered. If the illness is transmissible through food, they cannot work in the establishment at all."},
+  {l:9,q:"What should you NOT use to dry your hands after washing?",o:["Disposable paper towels","A hot air dryer","Your apron","A clean single-use towel"],a:2,e:"Never use your apron to dry hands — you reintroduce contaminants onto your hands."},
+
+  // LESSON 10 — ESTABLISHMENT DESIGN
+  {l:10,q:"The proper sequence to wash dishes by hand is:",o:["Wash, sanitize, rinse, dry","Wash, rinse, sanitize, air-dry","Rinse, wash, dry, sanitize","Sanitize, wash, rinse, towel-dry"],a:1,e:"Wash, rinse, sanitize, air-dry. Never towel-dry — it re-contaminates."},
+  {l:10,q:"To hot-water sanitize dishes by immersion, the water temperature must be:",o:["120°F for 30 seconds","140°F for 15 seconds","170°F for at least 30 seconds","212°F for 1 minute"],a:2,e:"Hot water sanitization: immerse utensils in 170°F water for at least 30 seconds."},
+  {l:10,q:"To prepare a 50 PPM chlorine sanitizing solution, add:",o:["1/4 ounce bleach to 1 gallon water","1/2 ounce bleach to 1 gallon water","1 ounce bleach to 1 gallon water","2 ounces bleach to 1 gallon water"],a:1,e:"50 PPM = 1/2 ounce bleach to 1 gallon water. Used for immersing utensils for at least 1 minute."},
+  {l:10,q:"To prepare a 100 PPM chlorine sanitizing solution, add:",o:["1/2 ounce bleach to 1 gallon water","1 ounce bleach to 1 gallon water","2 ounces bleach to 1 gallon water","4 ounces bleach to 1 gallon water"],a:1,e:"100 PPM = 1 ounce bleach to 1 gallon water. Used for wiping, spraying, or pouring."},
+  {l:10,q:"Wiping cloths must be stored in:",o:["A 50 PPM sanitizing solution","Plain water","A bucket of soapy water","Open air to dry"],a:0,e:"Wiping cloths are stored in a 50 PPM sanitizing solution between uses."},
+  {l:10,q:"Cutting boards must be washed, rinsed, and sanitized:",o:["Once a day","Once per shift","Between each use","Only when visibly dirty"],a:2,e:"Between each use, cutting boards must be washed, rinsed, and sanitized."},
+  {l:10,q:"Patron bathrooms must be provided when there are:",o:["10 seats or more","15 seats or more","20 seats or more","30 seats or more"],a:2,e:"Patron bathrooms required when there are 20 or more seats in the dining area."},
+  {l:10,q:"During chemical sanitization, the chemical solution must be:",o:["Replaced daily","Heated","Checked with a test kit","Mixed with detergent"],a:2,e:"During chemical sanitization, the chemical concentration must be verified with a test kit."},
+  {l:10,q:"Hot holding equipment must be capable of maintaining food at:",o:["120°F or above","135°F or above","140°F or above","165°F or above"],a:2,e:"Hot holding equipment must maintain potentially hazardous foods at 140°F or above."},
+
+  // LESSON 11 — PLUMBING
+  {l:11,q:"An air break must be installed at:",o:["Hand wash sinks","Each culinary or equipment sink","Bathroom sinks","All faucets"],a:1,e:"Air breaks are required at culinary and equipment sinks. NOT required at hand wash sinks."},
+  {l:11,q:"What is an air break?",o:["A power outage","An unobstructed vertical distance through air separating equipment from a waste/sewer pipe","A type of valve","A pressure regulator"],a:1,e:"An air break is an unobstructed vertical distance through air — twice the diameter of the discharge opening or 1 inch, whichever is greater."},
+  {l:11,q:"An Atmospheric Vacuum Breaker (AVB) must be installed in:",o:["All bathrooms","Equipment with a direct connection to potable water (e.g. ice machines, coffee machines, dishwashers)","Storage closets","Outdoor hose connections only"],a:1,e:"AVBs prevent backflow in equipment with direct potable water connections — ice machines, coffee machines, dishwashers."},
+  {l:11,q:"Cross-connection in plumbing can be prevented by installing:",o:["A larger pipe","A hose bib vacuum breaker","A pressure regulator","A double-walled fitting"],a:1,e:"A hose bib vacuum breaker prevents cross-connection between potable water and contaminated water."},
+  {l:11,q:"Gas-fired hot water heaters must be:",o:["Installed by anyone","Installed by a licensed plumber and monitored for back draft","Self-installed","Inspected annually only"],a:1,e:"Gas-fired hot water heaters must be installed by a licensed plumber and monitored for back draft."},
+  {l:11,q:"In NYC, dumping grease in a sink without a proper grease interceptor is:",o:["Allowed for small amounts","Illegal","Allowed with a permit","Permitted at night only"],a:1,e:"NYC laws make it illegal to dump grease into any sink that does not have a proper grease interceptor."},
+  {l:11,q:"Grease interceptors should remove what percentage of grease from wastewater?",o:["At least 50%","At least 75%","At least 90%","100%"],a:2,e:"Grease interceptors should remove at least 90% of the grease from wastewater."},
+
+  // LESSON 12 — PEST CONTROL
+  {l:12,q:"Insecticides and rodenticides can only be applied in a restaurant by:",o:["The owner","Any trained employee","A licensed pest control officer","The chef"],a:2,e:"Only a licensed pest control officer (PCO) may apply pesticides in a NYC food establishment."},
+  {l:12,q:"What are the three key strategies of Integrated Pest Management?",o:["Spray, trap, repel","Starve them, build them out, destroy them","Clean, cover, control","Lock, lure, lift"],a:1,e:"IPM: Starve them (deny food), Build them out (block access), Destroy them (eliminate existing pests)."},
+  {l:12,q:"Rats can enter buildings through openings as small as:",o:["A pencil","The size of a quarter","A dime","A nickel"],a:1,e:"Rats can enter through openings as small as the size of a quarter."},
+  {l:12,q:"The presence of fresh rat droppings in a food establishment is:",o:["A general violation","A critical violation","Acceptable in small amounts","A warning only"],a:1,e:"Fresh rat droppings are a critical violation."},
+  {l:12,q:"The best method for eliminating flies and roaches is:",o:["Heavy pesticide use","Proper cleaning and sanitizing","Fumigation","Setting traps everywhere"],a:1,e:"The best method for eliminating flies and roaches is proper cleaning and sanitizing — denies them food and breeding sites."},
+  {l:12,q:"What kind of fly trap is PROHIBITED in a food establishment?",o:["Glue traps","Fly catchers","Fly zappers (electrocuting traps)","UV light traps with glue"],a:2,e:"Fly zappers (electrocuting traps) are prohibited — fly parts can become airborne and contaminate food."},
+  {l:12,q:"Door sweeps to prevent pest entry must have a gap of less than:",o:["1/2 inch","1/4 inch","1/8 inch","1 inch"],a:2,e:"Any gap must be less than 1/8 inch to prevent pest entry."},
+  {l:12,q:"Service animals in a food establishment are:",o:["Always prohibited","Allowed if accompanying disabled persons","Allowed only outside","Allowed with a permit"],a:1,e:"Section 81.25 prohibits live animals in food establishments BUT does not apply to service animals accompanying disabled persons."},
+  {l:12,q:"How often must a licensed pest management professional examine the premises?",o:["Once per year","Twice per year","At least monthly","Every 6 months"],a:2,e:"Health Code requires a licensed pest management professional to examine the premises at least monthly. Records must be kept."},
+
+  // LESSON 13 — HACCP
+  {l:13,q:"What does HACCP stand for?",o:["Health and Critical Cleanliness Protection","Hazard Analysis and Critical Control Point","Health Access Critical Care Program","Hazard Avoidance and Continuous Cooking Practice"],a:1,e:"HACCP = Hazard Analysis and Critical Control Point."},
+  {l:13,q:"How many principles are in the HACCP system?",o:["5","6","7","10"],a:2,e:"HACCP has 7 principles: identify hazards, determine CCPs, set critical limits, monitor CCPs, take corrective actions, verify the system, keep records."},
+  {l:13,q:"What is a Critical Control Point (CCP)?",o:["Any cooking step","Any point in the food flow where action must be taken to eliminate the hazard","The temperature of the kitchen","Any place food is stored"],a:1,e:"A CCP is any point in the food flow where action MUST be taken to prevent, reduce, or eliminate a hazard."},
+  {l:13,q:"If potentially hazardous foods are left in the temperature danger zone for more than:",o:["1 hour, they must be discarded","2 hours, they must be discarded","4 hours, they must be discarded","6 hours, they must be discarded"],a:1,e:"If PHF is in the danger zone for more than 2 hours, the food is no longer safe and must be discarded."},
+  {l:13,q:"When making cold salads (like tuna salad), the best practice is to:",o:["Cook the ingredients","Pre-chill the ingredients","Add extra mayonnaise","Salt heavily"],a:1,e:"When making cold salads, pre-chill the ingredients to keep the final product out of the danger zone."},
+  {l:13,q:"Artificial trans fat in restaurants is:",o:["Allowed in moderation","Allowed if disclosed on the menu","Banned from all restaurant foods","Required to be labeled"],a:2,e:"Artificial trans fat is banned from all restaurant foods in NYC — it raises LDL ('bad') cholesterol."},
+  {l:13,q:"Who developed the HACCP system?",o:["The CDC","The FDA","The Pillsbury Company in the 1960s","The USDA"],a:2,e:"HACCP was pioneered by the Pillsbury Company in the 1960s for the space program — to ensure safe food for astronauts."},
+
+  // LESSON 14 — REQUIRED POSTINGS
+  {l:14,q:"The 'First Aid Choking' poster must be posted:",o:["At the entrance only","Conspicuously in each designated eating area","In the kitchen only","On the menu"],a:1,e:"The First Aid Choking poster (Heimlich maneuver) must be conspicuously posted in each designated eating area."},
+  {l:14,q:"An 'Alcohol and Pregnancy Warning' sign is required at:",o:["All food establishments","Establishments that serve alcoholic beverages","Bars only","Catering halls only"],a:1,e:"Required at any establishment that serves alcoholic beverages — Local Law 63."},
+  {l:14,q:"A 'Wash Hands' sign must be displayed:",o:["At the entrance","In the bathroom only","At all hand washing sinks","On all walls"],a:2,e:"A 'Wash Hands' sign must be displayed at all hand washing sinks."},
+  {l:14,q:"'No Smoking' signs must be posted:",o:["Only at the entrance","Throughout each facility","On the menu","Only in the kitchen"],a:1,e:"'No Smoking' signs must be displayed throughout each facility."},
+  {l:14,q:"The 'How Are We Doing?' sign provides:",o:["A complaint form","A phone number for the public to obtain copies of inspection reports","Health department contact for permits","Restaurant marketing"],a:1,e:"The 'How Are We Doing?' sign provides a phone number for the public to obtain inspection reports for any NYC restaurant."},
+
+  // LESSON 15 — LOCAL LAWS
+  {l:15,q:"Local Law 47 (the NYC Smoke-Free Air Act) prohibits smoking in:",o:["Restaurants only","Virtually all establishments and businesses with employees","Bars only","Public parks only"],a:1,e:"Local Law 47 (effective March 30, 2003) requires virtually all establishments with employees to be smoke-free."},
+  {l:15,q:"What is the first violation civil penalty for the Smoke-Free Air Act?",o:["$50–$100","$100–$200","$200–$400","$500–$1000"],a:2,e:"First violation: $200–$400. Second: $500–$1,000. Third: $1,000–$2,000."},
+  {l:15,q:"Tobacco vending machines in food establishments are:",o:["Allowed in all restaurants","Prohibited in all food service establishments except taverns","Allowed with a permit","Banned everywhere"],a:1,e:"Local Law 67: tobacco vending machines are prohibited in food service establishments except in taverns."},
+  {l:15,q:"In a tavern with a cigarette vending machine, the machine must be placed at least:",o:["10 feet from any entrance","15 feet from any entrance","25 feet from any entrance","50 feet from any entrance"],a:2,e:"Cigarette vending machines must be placed at least 25 feet from any entrance and directly visible by the owner or employee."},
+  {l:15,q:"Local Law 83 prohibits selling tobacco to persons under:",o:["16 years old","18 years old","21 years old","No age limit"],a:1,e:"Local Law 83: tobacco sales prohibited to persons under 18. (Note: NYC raised this to 21 in later legislation, but the course curriculum covers Local Law 83's original 18-year threshold.)"},
+  {l:15,q:"Under Local Law 12, taverns and restaurants serving food on-premise must have:",o:["A defibrillator","Resuscitation equipment (CPR masks, gloves, signage)","A first-aid kit only","An EMT on call"],a:1,e:"Local Law 12: CPR resuscitation equipment required — adult and pediatric masks, latex gloves, and a notification sign."},
+  {l:15,q:"To prevent slips, trips, and falls, food workers should wear:",o:["Steel-toed boots","Slip-resistant shoes","Sandals for breathability","Athletic sneakers"],a:1,e:"Slip-resistant shoes prevent slips, trips, and falls — among the most common restaurant worker injuries."},
+  {l:15,q:"Calorie posting requirements apply to chain establishments with how many locations?",o:["5 or more in the U.S.","10 or more in the U.S.","15 or more in the U.S.","25 or more in the U.S."],a:2,e:"Calorie posting applies to chains with 15 or more establishments in the U.S. operating under common ownership/franchise."},
+
+  // STUDY GUIDE — bonus questions
+  {l:0,q:"How long can potentially hazardous foods spend in the temperature danger zone before being discarded?",o:["1 hour","2 hours","4 hours","6 hours"],a:1,e:"Per the DOH study guide: more than 2 hours in the danger zone = discard."},
+  {l:0,q:"What is the proper sequence for washing dishes by hand?",o:["Rinse, wash, sanitize, dry","Wash, rinse, sanitize, air-dry","Sanitize, wash, rinse, towel-dry","Wash, sanitize, rinse, air-dry"],a:1,e:"Wash, rinse, sanitize, air-dry. Air-dry is critical — towel drying re-contaminates."},
+  {l:0,q:"What are the three acceptable methods of thawing frozen foods?",o:["Refrigerator, cold running water, microwave with continuous cooking","Counter, refrigerator, microwave","Hot water, room temperature, oven","Refrigerator, hot water, freezer"],a:0,e:"The three acceptable methods: refrigeration, cold running water, or microwave with continuous cooking afterwards."},
+  {l:0,q:"50 PPM sanitizing solution is used for:",o:["Wiping surfaces","Spraying","Immersing utensils for at least 1 minute","Pouring on floors"],a:2,e:"50 PPM is for immersion (1 minute minimum). 100 PPM is for wiping/spraying/pouring."},
+  {l:0,q:"100 PPM sanitizing solution is typically used for:",o:["Immersing utensils","Wiping, spraying, or pouring","Drinking water","Hand washing"],a:1,e:"100 PPM is used for wiping, spraying, or pouring on surfaces."},
+  {l:0,q:"All cold foods must be held at:",o:["32°F or below","41°F or below (except smoked fish at 38°F)","45°F or below","50°F or below"],a:1,e:"Cold foods: 41°F or below at all times. Smoked fish exception: 38°F or below."},
+  {l:0,q:"Storing acidic foods in metal containers can cause:",o:["Faster cooling","A chemical hazard from metal leaching into food","Better preservation","No effect"],a:1,e:"Acidic foods react with metals like galvanized containers — creates a chemical hazard. Use food-grade plastic instead."},
+  {l:0,q:"Cooked foods placed in a refrigerator for cooling should be:",o:["Covered tightly to retain moisture","Left uncovered, then covered after cooling to 41°F","Stirred constantly","Sealed in plastic wrap"],a:1,e:"Hot foods cooled in a refrigerator must be covered ONLY after they have completely cooled to 41°F or below."},
+  {l:0,q:"What is the most common cause of cross-contamination?",o:["Equipment failure","Human error","Bad ingredients","Refrigerator malfunction"],a:1,e:"Human error — failing to wash hands, sanitize boards between tasks, or store foods properly — is the usual source of cross-contamination."},
+  {l:0,q:"For rare roast beef cooked at 130°F, how long must it be held at that temperature?",o:["15 seconds","30 minutes","121 minutes","2 hours"],a:2,e:"Rare roast beef at 130°F must be held for 121 minutes. Lower temps require longer hold times."},
+  {l:0,q:"Smoked fish must be held at or below 38°F to prevent:",o:["Salmonella","Clostridium botulinum","E. coli","Norovirus"],a:1,e:"Smoked fish at 38°F or below prevents Clostridium botulinum growth — botulism."},
+  {l:0,q:"When making fried chicken under HACCP, what is the criterion for cooking?",o:["Brown color","Internal temperature of 165°F for 15 seconds","Crispy texture","Cook for 30 minutes"],a:1,e:"Cooking is a critical control point. Criterion: 165°F for 15 seconds (poultry standard)."}
+];
+
+const TOPICS = [
+  {id:'all', label:'All lessons', filter:()=>true},
+  {id:'l1', label:'L1: Regulations', filter:q=>q.l===1},
+  {id:'l2', label:'L2: Receiving', filter:q=>q.l===2},
+  {id:'l3', label:'L3: Storage', filter:q=>q.l===3},
+  {id:'l4', label:'L4: Hazards', filter:q=>q.l===4},
+  {id:'l5', label:'L5: Bacteria', filter:q=>q.l===5},
+  {id:'l6', label:'L6: Other microbes', filter:q=>q.l===6},
+  {id:'l7', label:'L7: Illnesses', filter:q=>q.l===7},
+  {id:'l8', label:'L8: Preparing food', filter:q=>q.l===8},
+  {id:'l9', label:'L9: Hygiene', filter:q=>q.l===9},
+  {id:'l10', label:'L10: Design', filter:q=>q.l===10},
+  {id:'l11', label:'L11: Plumbing', filter:q=>q.l===11},
+  {id:'l12', label:'L12: Pest control', filter:q=>q.l===12},
+  {id:'l13', label:'L13: HACCP', filter:q=>q.l===13},
+  {id:'l14', label:'L14: Postings', filter:q=>q.l===14},
+  {id:'l15', label:'L15: Local laws', filter:q=>q.l===15},
+  {id:'sg', label:'Study guide', filter:q=>q.l===0}
+];
+
+const MODES = [
+  {id:'10', label:'Quick (10 q)', count:10},
+  {id:'25', label:'Medium (25 q)', count:25},
+  {id:'50', label:'Long (50 q)', count:50},
+  {id:'all', label:'Full set', count:999}
+];
+
+const LESSON_NAMES = {
+  0: '★ DOH Study Guide',
+  1: 'Lesson 1 — NYC Regulations',
+  2: 'Lesson 2 — Receiving',
+  3: 'Lesson 3 — Storage',
+  4: 'Lesson 4 — Hazards',
+  5: 'Lesson 5 — Bacteria',
+  6: 'Lesson 6 — Other Microbes',
+  7: 'Lesson 7 — Foodborne Illness',
+  8: 'Lesson 8 — Preparing Food',
+  9: 'Lesson 9 — Personal Hygiene',
+  10: 'Lesson 10 — Establishment Design',
+  11: 'Lesson 11 — Plumbing',
+  12: 'Lesson 12 — Pest Control',
+  13: 'Lesson 13 — HACCP',
+  14: 'Lesson 14 — Required Postings',
+  15: 'Lesson 15 — Local Laws'
+};
+
+let state = {topic:'all', mode:'10', questions:[], current:0, score:0, answered:false, history:[]};
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function renderSetup(){
+  const tb=document.getElementById('topic-buttons');
+  tb.innerHTML='';
+  TOPICS.forEach(t=>{
+    const b=document.createElement('button');
+    b.textContent=t.label;
+    if(state.topic===t.id) b.classList.add('selected');
+    b.onclick=()=>{state.topic=t.id;renderSetup();};
+    tb.appendChild(b);
+  });
+  const mb=document.getElementById('mode-buttons');
+  mb.innerHTML='';
+  MODES.forEach(m=>{
+    const b=document.createElement('button');
+    b.textContent=m.label;
+    if(state.mode===m.id) b.classList.add('selected');
+    b.onclick=()=>{state.mode=m.id;renderSetup();};
+    mb.appendChild(b);
+  });
+}
+
+function startQuiz(){
+  const topic=TOPICS.find(t=>t.id===state.topic);
+  const mode=MODES.find(m=>m.id===state.mode);
+  const pool=QUESTIONS.filter(topic.filter);
+  state.questions=shuffle(pool).slice(0,Math.min(mode.count,pool.length));
+  state.current=0;
+  state.score=0;
+  state.history=[];
+  state.answered=false;
+  document.getElementById('quiz-setup').style.display='none';
+  document.getElementById('quiz-results').style.display='none';
+  document.getElementById('quiz-active').style.display='block';
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const q=state.questions[state.current];
+  state.answered=false;
+  document.getElementById('progress-text').textContent='Question '+(state.current+1)+' of '+state.questions.length;
+  document.getElementById('score-text').textContent='Score: '+state.score;
+  document.getElementById('progress-fill').style.width=((state.current/state.questions.length)*100)+'%';
+  document.getElementById('q-lesson').textContent=LESSON_NAMES[q.l];
+  document.getElementById('q-text').textContent=q.q;
+  const opts=document.getElementById('q-options');
+  opts.innerHTML='';
+  q.o.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='option';
+    b.textContent=String.fromCharCode(65+i)+'.  '+opt;
+    b.onclick=()=>handleAnswer(i,b);
+    opts.appendChild(b);
+  });
+  document.getElementById('q-feedback').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+}
+
+function handleAnswer(choice,btn){
+  if(state.answered)return;
+  state.answered=true;
+  const q=state.questions[state.current];
+  const correct=choice===q.a;
+  if(correct)state.score++;
+  state.history.push({q,choice,correct});
+  const buttons=document.getElementById('q-options').querySelectorAll('button');
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.a) b.classList.add('correct');
+    else if(i===choice&&!correct) b.classList.add('incorrect');
+  });
+  const fb=document.getElementById('q-feedback');
+  fb.style.display='block';
+  fb.className='feedback '+(correct?'correct':'incorrect');
+  fb.innerHTML=(correct?'<strong>Correct.</strong> ':'<strong>Not quite.</strong> ')+q.e;
+  document.getElementById('score-text').textContent='Score: '+state.score;
+  const nb=document.getElementById('next-btn');
+  nb.style.display='block';
+  nb.textContent=state.current+1>=state.questions.length?'See results':'Next question';
+}
+
+function nextQuestion(){
+  state.current++;
+  if(state.current>=state.questions.length){showResults();}
+  else{renderQuestion();window.scrollTo(0,0);}
+}
+
+function showResults(){
+  document.getElementById('quiz-active').style.display='none';
+  document.getElementById('quiz-results').style.display='block';
+  document.getElementById('review-section').style.display='none';
+  const total=state.questions.length;
+  const wrong=total-state.score;
+  const pct=Math.round((state.score/total)*100);
+  document.getElementById('result-score').textContent=state.score+' / '+total;
+  document.getElementById('result-pct').textContent=pct+'% correct';
+  document.getElementById('stat-correct').textContent=state.score;
+  document.getElementById('stat-wrong').textContent=wrong;
+  document.getElementById('stat-total').textContent=total;
+  let msg='';
+  if(pct>=90)msg='Excellent. You should be ready for the exam.';
+  else if(pct>=75)msg='Good work. Review the questions you missed and you should be solid.';
+  else if(pct>=60)msg='Decent start. Spend more time on the lessons where you missed questions.';
+  else msg='Keep studying. Focus on temperatures, onset times, and pathogen sources — those are the highest-yield areas.';
+  document.getElementById('result-msg').textContent=msg;
+  window.scrollTo(0,0);
+}
+
+function showReview(){
+  const rs=document.getElementById('review-section');
+  rs.style.display='block';
+  rs.innerHTML='';
+  const card=document.createElement('div');
+  card.className='panel';
+  card.innerHTML='<h2 style="margin-bottom:16px;">Answer review</h2>';
+  state.history.forEach((h,i)=>{
+    const d=document.createElement('div');
+    d.className='review-item';
+    const status=h.correct?'<span class="check">✓ Correct</span>':'<span class="x">✗ Missed</span>';
+    d.innerHTML='<div class="review-header">Q'+(i+1)+' · '+LESSON_NAMES[h.q.l]+' · '+status+'</div>'+
+      '<div class="review-q">'+h.q.q+'</div>'+
+      '<div class="review-line">Your answer: '+h.q.o[h.choice]+'</div>'+
+      (!h.correct?'<div class="review-line correct">Correct: '+h.q.o[h.q.a]+'</div>':'')+
+      '<div class="review-line exp">'+h.q.e+'</div>';
+    card.appendChild(d);
+  });
+  rs.appendChild(card);
+  rs.scrollIntoView({behavior:'smooth'});
+}
+
+function restart(){
+  document.getElementById('quiz-results').style.display='none';
+  document.getElementById('quiz-setup').style.display='block';
+  renderSetup();
+  window.scrollTo(0,0);
+}
+
+document.getElementById('start-btn').onclick=startQuiz;
+document.getElementById('next-btn').onclick=nextQuestion;
+document.getElementById('quit-btn').onclick=showResults;
+document.getElementById('review-btn').onclick=showReview;
+document.getElementById('restart-btn').onclick=restart;
+
+renderSetup();
+</script>
+</body>
+</html>
